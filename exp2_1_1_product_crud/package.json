@@ -1,0 +1,13 @@
+{
+  "name": "exp2_1_1_product_crud",
+  "version": "1.0.0",
+  "description": "Experiment 2.1.1 - Product CRUD Operations with Mongoose",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.6.3"
+  }
+}
