@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 5.1 - Inventory Manager</title>
+    <link rel="stylesheet" href="../../lab.css">
+</head>
+<body>
+    <div class="lab-layout">
+        <aside class="sidebar">
+            <div class="header">
+                <h1>Lab 5.1</h1>
+                <p>Product Storage Simulator</p>
+            </div>
+
+            <div class="glass-card">
+                <h3>Add Item</h3>
+                <input type="text" id="itemName" placeholder="Enter Name" class="input-field">
+                <input type="number" id="itemCost" placeholder="Enter Price ₹" class="input-field">
+                <button class="btn" style="width:100%" onclick="addItem()">Save Item</button>
+            </div>
+
+            <a href="../index.html" style="margin-top:auto; color: var(--primary); text-decoration: none; font-weight:600;">
+                ← Go Back
+            </a>
+        </aside>
+
+        <main class="main-content">
+            <div class="glass-card">
+                <h3>Database Activity Log</h3>
+                <div class="console" id="consoleBox" style="height:150px;">
+                    <div class="line">
+                        <span class="timestamp">[INIT]</span> Connected to local product storage
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3>Product List</h3>
+                <div id="productList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:1rem;">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let itemStore = JSON.parse(localStorage.getItem('lab5_items') || '[]');
+
+        function addItem() {
+            let name = document.getElementById('itemName').value;
+            let price = document.getElementById('itemCost').value;
+
+            if (!name || !price) return;
+
+            logMsg("> Sending data to database...");
+
+            setTimeout(() => {
+                let newItem = {
+                    uid: new Date().getTime(),
+                    title: name,
+                    cost: price
+                };
+
+                itemStore.unshift(newItem);
+
+                document.getElementById('itemName').value = '';
+                document.getElementById('itemCost').value = '';
+
+                persistData();
+                displayItems();
+
+                logMsg("> Item stored successfully ✅", "success");
+            }, 400);
+        }
+
+        function deleteItem(uid) {
+            itemStore = itemStore.filter(obj => obj.uid !== uid);
+            persistData();
+            displayItems();
+            logMsg(`> Item removed (${uid})`, "error");
+        }
+
+        function persistData() {
+            localStorage.setItem('lab5_items', JSON.stringify(itemStore));
+        }
+
+        function displayItems() {
+            let container = document.getElementById('productList');
+
+            container.innerHTML = itemStore.map(obj => `
+                <div class="glass-card" style="margin:0; border-top:3px solid var(--primary)">
+                    <h4 style="margin:0">${obj.title}</h4>
+                    <p style="margin:0; color:var(--success)">₹${obj.cost}</p>
+                    <button class="btn" 
+                        style="margin-top:1rem; padding:0.4rem; background:var(--error); font-size:0.7rem; width:100%"
+                        onclick="deleteItem(${obj.uid})">
+                        Remove
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function logMsg(message, type="normal") {
+            let consoleBox = document.getElementById('consoleBox');
+            let color = type === "success" ? "var(--success)" : type === "error" ? "var(--error)" : "white";
+
+            consoleBox.innerHTML += `<div style="color:${color}">${message}</div>`;
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        displayItems();
+    </script>
+</body>
+</html>
