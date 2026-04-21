@@ -1,1 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 5.2 - MVC Demo</title>
+    <link rel="stylesheet" href="../../lab.css">
 
+    <style>
+        .mvc-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 1.8rem;
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .box {
+            padding: 1rem;
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            text-align: center;
+            width: 130px;
+        }
+
+        .arrow {
+            color: var(--text-muted);
+            font-size: 1.4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lab-layout">
+
+        <aside class="sidebar">
+            <div class="header">
+                <h1>Lab 5.2</h1>
+                <p>MVC Simulation</p>
+            </div>
+
+            <div class="glass-card">
+                <h3>Controller Panel</h3>
+
+                <button class="btn" style="width:100%; margin-bottom:1rem"
+                    onclick="runAction('GET_DATA')">
+                    Load Students
+                </button>
+
+                <button class="btn" style="width:100%"
+                    onclick="runAction('ADD_DATA')">
+                    Add Student
+                </button>
+            </div>
+
+            <a href="../index.html"
+               style="margin-top:auto; color: var(--primary); text-decoration: none; font-weight:600;">
+               ← Back
+            </a>
+        </aside>
+
+        <main class="main-content">
+
+            <div class="mvc-flow">
+                <div class="box">VIEW<br>(UI)</div>
+                <div class="arrow">⇄</div>
+                <div class="box" id="ctrlBox">CONTROLLER</div>
+                <div class="arrow">⇄</div>
+                <div class="box">MODEL<br>(Data)</div>
+            </div>
+
+            <div class="glass-card">
+                <div id="info" style="margin-bottom:1rem; color:var(--primary)">
+                    Waiting for action...
+                </div>
+
+                <div id="studentGrid"
+                     style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:1rem;">
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        let data = [
+            { id: 1, name: "Aarav", roll: "201" },
+            { id: 2, name: "Meera", roll: "202" }
+        ];
+
+        function runAction(type) {
+            const info = document.getElementById('info');
+            const ctrl = document.getElementById('ctrlBox');
+
+            ctrl.style.background = 'var(--primary)';
+            ctrl.style.color = '#000';
+            info.innerText = `Processing: ${type}...`;
+
+            setTimeout(() => {
+                ctrl.style.background = 'transparent';
+                ctrl.style.color = 'inherit';
+
+                info.innerText = `${type} handled successfully.`;
+
+                if (type === 'GET_DATA') display();
+                if (type === 'ADD_DATA') {
+                    data.push({
+                        id: Date.now(),
+                        name: "Student " + data.length,
+                        roll: Math.floor(Math.random() * 900) + 100
+                    });
+                    display();
+                }
+
+            }, 700);
+        }
+
+        function display() {
+            document.getElementById('studentGrid').innerHTML =
+                data.map(item => `
+                <div class="glass-card" style="margin:0; border-left:3px solid var(--secondary)">
+                    <h4 style="margin:0">${item.name}</h4>
+                    <p style="margin:0; font-size:0.85rem">Roll No: ${item.roll}</p>
+                </div>
+            `).join('');
+        }
+
+        display();
+    </script>
+</body>
+</html>
