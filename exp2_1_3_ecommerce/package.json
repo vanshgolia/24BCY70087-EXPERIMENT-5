@@ -1,1 +1,13 @@
-
+{
+  "name": "exp2_1_3_ecommerce",
+  "version": "1.0.0",
+  "description": "Experiment 2.1.3 - E-commerce Catalog with Nested Schemas & Aggregation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.6.3"
+  }
+}
