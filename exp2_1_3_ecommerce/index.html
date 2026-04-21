@@ -1,1 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 5.3 - Product Gallery</title>
+    <link rel="stylesheet" href="../../lab.css">
+</head>
+<body>
+    <div class="lab-layout">
 
+        <aside class="sidebar">
+            <div class="header">
+                <h1>Lab 5.3</h1>
+                <p>Shopping Catalog Demo</p>
+            </div>
+
+            <div class="glass-card">
+                <h3>Search Items</h3>
+                <input type="text" id="searchBox" placeholder="Type product name..." 
+                       class="input-field" oninput="displayProducts()">
+            </div>
+
+            <div class="glass-card">
+                <h3>Cart Summary</h3>
+                <div id="cartStatus">0 Products</div>
+            </div>
+
+            <a href="../index.html"
+               style="margin-top:auto; color: var(--primary); text-decoration: none; font-weight:600;">
+               ← Go Back
+            </a>
+        </aside>
+
+        <main class="main-content">
+            <div class="glass-card">
+                <h2>Available Products</h2>
+
+                <div id="productGrid"
+                     style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:1.5rem; margin-top:1.5rem;">
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        const items = [
+            { id: 1, name: "Premium Hoodie", price: "1299" },
+            { id: 2, name: "Leather Wallet", price: "799" },
+            { id: 3, name: "Sneaker X", price: "2499" },
+            { id: 4, name: "Cotton Tee", price: "499" }
+        ];
+
+        let cartCount = 0;
+
+        function addToCart() {
+            cartCount++;
+            document.getElementById('cartStatus').innerText = `${cartCount} Products`;
+            alert('Item added to cart!');
+        }
+
+        function displayProducts() {
+            const search = document.getElementById('searchBox').value.toLowerCase();
+
+            document.getElementById('productGrid').innerHTML = items
+                .filter(item => item.name.toLowerCase().includes(search))
+                .map(item => `
+                    <div class="glass-card" style="margin:0; border:1px solid rgba(255,255,255,0.08)">
+                        <div style="height:110px; background:rgba(255,255,255,0.04); border-radius:10px; margin-bottom:1rem; display:flex; align-items:center; justify-content:center; font-size:2.5rem">
+                            🛍️
+                        </div>
+
+                        <h4 style="margin:0">${item.name}</h4>
+                        <p style="margin:0.5rem 0; color:var(--success)">₹${item.price}</p>
+
+                        <button class="btn" style="width:100%" onclick="addToCart()">
+                            Add Item
+                        </button>
+                    </div>
+                `).join('');
+        }
+
+        displayProducts();
+    </script>
+</body>
+</html>
